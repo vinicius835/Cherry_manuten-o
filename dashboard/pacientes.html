@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - Clínica Médica</title>
+    <link rel="stylesheet" href="../estilo.css">
+    <style>
+        /* Novos estilos para a tela de pacientes */
+        .patient-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .filters-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .loyalty-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        .loyalty-bronze {
+            background-color: #cd7f32;
+            color: white;
+        }
+        
+        .loyalty-silver {
+            background-color: #c0c0c0;
+            color: #333;
+        }
+        
+        .loyalty-gold {
+            background-color: #ffd700;
+            color: #333;
+        }
+        
+        .loyalty-platinum {
+            background: linear-gradient(45deg, #e5e4e2, #cfc9c2);
+            color: #333;
+        }
+        
+        .patient-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        .patient-details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .loyalty-benefits {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .loyalty-benefits h4 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .benefits-list {
+            list-style-type: none;
+        }
+        
+        .benefits-list li {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            margin-right: 10px;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .filters-container {
+                flex-direction: column;
+            }
+            
+            .patient-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>CherryHP</h2>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div onclick="window.location.href = 'index.html'" class="menu-item" data-page="dashboard">
+                    <span>🏠</span> Dashboard
+                </div>
+                <div onclick="window.location.href = 'pacientes.html'" class="menu-item active" data-page="pacientes">
+                    <span>👨‍👩‍👧‍👦</span> Pacientes
+                </div>
+                <div onclick="window.location.href = 'consultas.html'" class="menu-item" data-page="consultas">
+                    <span>📅</span> Consultas
+                </div>
+                <div onclick="window.location.href = 'medicos.html'" class="menu-item" data-page="medicos">
+                    <span>👨‍⚕️</span> Médicos
+                </div>
+                <div onclick="window.location.href = 'prontuarios.html'" class="menu-item" data-page="prontuarios">
+                    <span>📋</span> Prontuários
+                </div>
+                <div onclick="window.location.href = 'financeiro.html'" class="menu-item" data-page="financeiro">
+                    <span>💰</span> Financeiro
+                </div>
+                <div onclick="window.location.href = 'configuracoes.html'" class="menu-item" data-page="configuracoes">
+                    <span>⚙️</span> Configurações
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Pacientes</h1>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <span>Admin</span>
+                    <button class="logout-btn">Sair</button>
+                </div>
+            </div>
+            
+            <div class="patient-header">
+                <h2>Gerenciamento de Pacientes</h2>
+                <button onclick="window.location.href = '../cadastro/paciente.html'" class="btn btn-primary">Novo Paciente</button>
+            </div>
+            
+            <!-- Estatísticas rápidas -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div>Total de Pacientes</div>
+                    <div class="stat-value">1,245</div>
+                </div>
+                <div class="stat-item">
+                    <div>Novos este mês</div>
+                    <div class="stat-value">42</div>
+                </div>
+                <div class="stat-item">
+                    <div>Programa Fidelidade</div>
+                    <div class="stat-value">893</div>
+                </div>
+                <div class="stat-item">
+                    <div>Em dia com pagamentos</div>
+                    <div class="stat-value">1,103</div>
+                </div>
+            </div>
+            
+            <!-- Filtros -->
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="searchInput">Buscar paciente</label>
+                    <input type="text" id="searchInput" placeholder="Nome, CPF ou telefone...">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter">
+                        <option value="">Todos</option>
+                        <option value="active">Ativo</option>
+                        <option value="inactive">Inativo</option>
+                        <option value="overdue">Com pendências</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="loyaltyFilter">Categoria Fidelidade</label>
+                    <select id="loyaltyFilter">
+                        <option value="">Todas</option>
+                        <option value="bronze">Bronze</option>
+                        <option value="silver">Prata</option>
+                        <option value="gold">Ouro</option>
+                        <option value="platinum">Platina</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="bloodTypeFilter">Tipo Sanguíneo</label>
+                    <select id="bloodTypeFilter">
+                        <option value="">Todos</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="btn" id="applyFilters">Aplicar Filtros</button>
+                </div>
+            </div>
+            
+            <!-- Opções de exportação -->
+            <div class="export-options">
+                <button class="btn" onclick="showNotification('Exportação para Excel em andamento...', 'info')">
+                    📊 Exportar para Excel
+                </button>
+                <button class="btn" onclick="showNotification('Exportação para PDF em andamento...', 'info')">
+                    📄 Exportar para PDF
+                </button>
+                <button class="btn" onclick="showNotification('Relatório de fidelidade gerado...', 'info')">
+                    👑 Relatório de Fidelidade
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Lista de Pacientes</h3>
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar paciente..." id="searchTable">
+                        <button class="btn" id="searchButton">Buscar</button>
+                    </div>
+                </div>
+                
+                <table class="table" id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Data Nasc.</th>
+                            <th>Telefone</th>
+                            <th>Categoria</th>
+                            <th>Última Consulta</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1001</td>
+                            <td>João Silva 
+                                <span class="loyalty-badge loyalty-platinum">Platina</span>
+                            </td>
+                            <td>123.456.789-00</td>
+                            <td>15/03/1985</td>
+                            <td>(11) 9999-8888</td>
+                            <td>Platina</td>
+                            <td>10/05/2023</td>
+                            <td class="patient-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showPatientDetails(1001)">Ver</button>
+                                <button class="btn btn-primary btn-sm" onclick="editPatient(1001)">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deletePatient(1001)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1002</td>
+                            <td>Maria Oliveira 
+                                <span class="loyalty-badge loyalty-gold">Ouro</span>
+                            </td>
+                            <td>987.654.321-00</td>
+                            <td>22/07/1990</td>
+                            <td>(11) 9888-7777</td>
+                            <td>Ouro</td>
+                            <td>08/05/2023</td>
+                            <td class="patient-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showPatientDetails(1002)">Ver</button>
+                                <button class="btn btn-primary btn-sm" onclick="editPatient(1002)">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deletePatient(1002)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1003</td>
+                            <td>Pedro Santos 
+                                <span class="loyalty-badge loyalty-silver">Prata</span>
+                            </td>
+                            <td>456.789.123-00</td>
+                            <td>10/11/1978</td>
+                            <td>(11) 9777-6666</td>
+                            <td>Prata</td>
+                            <td>05/05/2023</td>
+                            <td class="patient-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showPatientDetails(1003)">Ver</button>
+                                <button class="btn btn-primary btn-sm" onclick="editPatient(1003)">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deletePatient(1003)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>1004</td>
+                            <td>Ana Costa 
+                                <span class="loyalty-badge loyalty-bronze">Bronze</span>
+                            </td>
+                            <td>321.654.987-00</td>
+                            <td>30/01/2000</td>
+                            <td>(11) 9666-5555</td>
+                            <td>Bronze</td>
+                            <td>02/05/2023</td>
+                            <td class="patient-actions">
+                                <button class="btn btn-primary btn-sm" onclick="showPatientDetails(1004)">Ver</button>
+                                <button class="btn btn-primary btn-sm" onclick="editPatient(1004)">Editar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deletePatient(1004)">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <button class="btn">Anterior</button>
+                    <span>Página 1 de 5</span>
+                    <button class="btn">Próxima</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de detalhes do paciente -->
+    <div class="patient-details-modal" id="patientDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Paciente</h3>
+                <button class="btn btn-danger" onclick="closeModal()">Fechar</button>
+            </div>
+            <div id="patientDetailsContent">
+                <!-- Conteúdo carregado dinamicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sistema de filtros
+            const applyFiltersBtn = document.getElementById('applyFilters');
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const loyaltyFilter = document.getElementById('loyaltyFilter');
+            const bloodTypeFilter = document.getElementById('bloodTypeFilter');
+            const searchTable = document.getElementById('searchTable');
+            const searchButton = document.getElementById('searchButton');
+            
+            applyFiltersBtn.addEventListener('click', function() {
+                const filters = {
+                    search: searchInput.value,
+                    status: statusFilter.value,
+                    loyalty: loyaltyFilter.value,
+                    bloodType: bloodTypeFilter.value
+                };
+                
+                showNotification('Filtros aplicados: ' + JSON.stringify(filters), 'info');
+                // Em sistema real, aqui seria feita uma requisição para filtrar os dados
+            });
+            
+            searchButton.addEventListener('click', function() {
+                showNotification('Buscando por: ' + searchTable.value, 'info');
+                // Em sistema real, aqui seria feita a busca
+            });
+            
+            // Busca em tempo real
+            searchTable.addEventListener('input', function() {
+                // Simulação de busca em tempo real
+                const searchValue = this.value.toLowerCase();
+                if (searchValue.length > 2) {
+                    console.log("Buscando pacientes com: ", searchValue);
+                    // Em sistema real, aqui seria feita a busca com debounce
+                }
+            });
+            
+            // Sistema de fidelidade - Regra de negócio incomum
+            function calculateLoyaltyCategory(totalSpent, consultationCount) {
+                // Regra complexa: categoria baseada em valor gasto E número de consultas
+                let category = '';
+                
+                if (totalSpent >= 10000 && consultationCount >= 20) {
+                    category = 'Platina';
+                } else if (totalSpent >= 5000 && consultationCount >= 10) {
+                    category = 'Ouro';
+                } else if (totalSpent >= 2000 && consultationCount >= 5) {
+                    category = 'Prata';
+                } else if (totalSpent >= 500 || consultationCount >= 2) {
+                    category = 'Bronze';
+                } else {
+                    category = 'Iniciante';
+                }
+                
+                return category;
+            }
+            
+            function getLoyaltyBenefits(category) {
+                const benefits = {
+                    'Platina': [
+                        'Desconto de 20% em todas as consultas',
+                        'Atendimento prioritário',
+                        'Acesso a médicos exclusivos',
+                        'Agendamento com horários flexíveis',
+                        'Telemedicina gratuita'
+                    ],
+                    'Ouro': [
+                        'Desconto de 15% em todas as consultas',
+                        'Atendimento prioritário',
+                        'Reagendamento sem custo',
+                        'Levar um acompanhante gratuito'
+                    ],
+                    'Prata': [
+                        'Desconto de 10% em consultas de rotina',
+                        'Lembretes de consultas via WhatsApp',
+                        'Acesso a conteúdo exclusivo de saúde'
+                    ],
+                    'Bronze': [
+                        'Desconto de 5% na segunda consulta',
+                        'Programa de indicação com benefícios'
+                    ],
+                    'Iniciante': [
+                        'Boas-vindas ao programa de fidelidade',
+                        'Primeira consulta com desconto especial'
+                    ]
+                };
+                
+                return benefits[category] || [];
+            }
+            
+            // Exemplo de uso
+            console.log("Categoria para R$ 12.000, 25 consultas:", calculateLoyaltyCategory(12000, 25));
+            console.log("Benefícios Platina:", getLoyaltyBenefits('Platina'));
+        });
+        
+        // Funções para ações dos pacientes
+        function showPatientDetails(patientId) {
+            // Simulação de carregamento de detalhes do paciente
+            const modal = document.getElementById('patientDetailsModal');
+            const content = document.getElementById('patientDetailsContent');
+            
+            // Simular dados do paciente (em sistema real, viria de uma API)
+            const patientData = {
+                1001: {
+                    name: 'João Silva',
+                    category: 'Platina',
+                    totalSpent: 12500,
+                    consultations: 28,
+                    benefits: getLoyaltyBenefits('Platina')
+                },
+                1002: {
+                    name: 'Maria Oliveira',
+                    category: 'Ouro',
+                    totalSpent: 7800,
+                    consultations: 15,
+                    benefits: getLoyaltyBenefits('Ouro')
+                },
+                1003: {
+                    name: 'Pedro Santos',
+                    category: 'Prata',
+                    totalSpent: 3500,
+                    consultations: 8,
+                    benefits: getLoyaltyBenefits('Prata')
+                },
+                1004: {
+                    name: 'Ana Costa',
+                    category: 'Bronze',
+                    totalSpent: 800,
+                    consultations: 3,
+                    benefits: getLoyaltyBenefits('Bronze')
+                }
+            };
+            
+            const patient = patientData[patientId] || {
+                name: 'Paciente ' + patientId,
+                category: 'Iniciante',
+                totalSpent: 0,
+                consultations: 0,
+                benefits: getLoyaltyBenefits('Iniciante')
+            };
+            
+            // Construir HTML dos detalhes
+            content.innerHTML = `
+                <h4>${patient.name} - <span class="loyalty-badge loyalty-${patient.category.toLowerCase()}">${patient.category}</span></h4>
+                <p>Total gasto: R$ ${patient.totalSpent.toLocaleString('pt-BR')}</p>
+                <p>Número de consultas: ${patient.consultations}</p>
+                
+                <div class="loyalty-benefits">
+                    <h4>Benefícios da Categoria ${patient.category}</h4>
+                    <ul class="benefits-list">
+                        ${patient.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-primary" onclick="upgradeLoyalty(${patientId})">Solicitar Upgrade</button>
+                    <button class="btn" onclick="showNotification('Histórico de benefícios seria exibido', 'info')">Ver Histórico</button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('patientDetailsModal').style.display = 'none';
+        }
+        
+        function editPatient(patientId) {
+            showNotification(`Editando paciente ${patientId}...`, 'info');
+            // Em sistema real, redirecionaria para a página de edição
+            setTimeout(() => {
+                window.location.href = `../cadastro/paciente.html?id=${patientId}&edit=true`;
+            }, 1000);
+        }
+        
+        function deletePatient(patientId) {
+            if (confirm('Tem certeza que deseja excluir este paciente? Esta ação não pode ser desfeita.')) {
+                showNotification(`Paciente ${patientId} excluído com sucesso.`, 'success');
+                // Em sistema real, faria uma requisição para API excluir o paciente
+            }
+        }
+        
+        function upgradeLoyalty(patientId) {
+            showNotification('Solicitação de upgrade enviada. Um analista avaliará seu pedido.', 'info');
+            // Em sistema real, criaria uma solicitação no sistema para avaliação
+        }
+        
+        // Função de notificação
+        function showNotification(message, type) {
+            // Implementação similar à da tela anterior
+            alert(`${type.toUpperCase()}: ${message}`);
+        }
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('patientDetailsModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Médicos - Clínica Médica</title>
+    <link rel="stylesheet" href="../estilo.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>CherryHP</h2>
+            </div>
+            
+           <div class="sidebar-menu">
+                <div onclick="window.location.href = 'index.html'" class="menu-item" data-page="dashboard">
+                    <span>🏠</span> Dashboard
+                </div>
+                <div onclick="window.location.href = 'pacientes.html'" class="menu-item" data-page="pacientes">
+                    <span>👨‍👩‍👧‍👦</span> Pacientes
+                </div>
+                <div onclick="window.location.href = 'consultas.html'" class="menu-item" data-page="consultas">
+                    <span>📅</span> Consultas
+                </div>
+                <div onclick="window.location.href = 'medicos.html'" class="menu-item active" data-page="medicos">
+                    <span>👨‍⚕️</span> Médicos
+                </div>
+                <div onclick="window.location.href = 'prontuarios.html'" class="menu-item" data-page="prontuarios">
+                    <span>📋</span> Prontuários
+                </div>
+                <div onclick="window.location.href = 'financeiro.html'" class="menu-item" data-page="financeiro">
+                    <span>💰</span> Financeiro
+                </div>
+                <div onclick="window.location.href = 'configuracoes.html'" class="menu-item" data-page="configuracoes">
+                    <span>⚙️</span> Configurações
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Gerenciamento de Médicos</h1>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <span>Admin</span>
+                    <button class="logout-btn">Sair</button>
+                </div>
+            </div>
+            
+            <div class="page-title">
+                <h2>Cadastro de Médicos</h2>
+                <button onclick="window.location.href = '../cadastro/medico.html'" class="btn btn-primary">Novo Médico</button>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Médicos Cadastrados</h3>
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar médico...">
+                        <button class="btn">Buscar</button>
+                    </div>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CRM</th>
+                            <th>Nome</th>
+                            <th>Especialidade</th>
+                            <th>Telefone</th>
+                            <th>E-mail</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SP-123456</td>
+                            <td>Dra. Ana Souza</td>
+                            <td>Cardiologia</td>
+                            <td>(11) 9999-8888</td>
+                            <td>ana.souza@clinica.com</td>
+                            <td><span class="status-badge active">Ativo</span></td>
+                            <td>
+                                <button class="btn btn-primary">Editar</button>
+                                <button class="btn btn-danger">Desativar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>SP-654321</td>
+                            <td>Dr. Carlos Mendes</td>
+                            <td>Pediatria</td>
+                            <td>(11) 9888-7777</td>
+                            <td>carlos.mendes@clinica.com</td>
+                            <td><span class="status-badge active">Ativo</span></td>
+                            <td>
+                                <button class="btn btn-primary">Editar</button>
+                                <button class="btn btn-danger">Desativar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <button class="btn">Anterior</button>
+                    <span>Página 1 de 3</span>
+                    <button class="btn">Próxima</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Especialidades</h3>
+                    <button class="btn btn-primary">Adicionar Especialidade</button>
+                </div>
+                
+                <div class="specialties-grid">
+                    <div class="specialty-card">
+                        <h4>Cardiologia</h4>
+                        <p>5 médicos</p>
+                    </div>
+                    <div class="specialty-card">
+                        <h4>Pediatria</h4>
+                        <p>3 médicos</p>
+                    </div>
+                    <div class="specialty-card">
+                        <h4>Ortopedia</h4>
+                        <p>4 médicos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../script.js"></script>
+</body>
+</html>

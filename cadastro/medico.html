@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Médico - Clínica Médica</title>
+    <link rel="stylesheet" href="../estilo.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>CherryHP</h2>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div onclick="window.location.href = '../dashboard/index.html'" class="menu-item" data-page="dashboard">
+                    <span>🏠</span> Dashboard
+                </div>
+                <div onclick="window.location.href = '../dashboard/pacientes.html'" class="menu-item" data-page="pacientes">
+                    <span>👨‍👩‍👧‍👦</span> Pacientes
+                </div>
+                <div onclick="window.location.href = '../dashboard/consultas.html'" class="menu-item" data-page="consultas">
+                    <span>📅</span> Consultas
+                </div>
+                <div onclick="window.location.href = '../dashboard/medicos.html'" class="menu-item active" data-page="medicos">
+                    <span>👨‍⚕️</span> Médicos
+                </div>
+                <div onclick="window.location.href = '../dashboard/prontuarios.html'" class="menu-item" data-page="prontuarios">
+                    <span>📋</span> Prontuários
+                </div>
+                <div onclick="window.location.href = '../dashboard/financeiro.html'" class="menu-item" data-page="financeiro">
+                    <span>💰</span> Financeiro
+                </div>
+                <div onclick="window.location.href = '../dashboard/configuracoes.html'" class="menu-item" data-page="configuracoes">
+                    <span>⚙️</span> Configurações
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Cadastro de Médico</h1>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <span>Admin</span>
+                    <button class="logout-btn">Sair</button>
+                </div>
+            </div>
+            
+            <div class="page-title">
+                <h2>Preencha os dados do médico</h2>
+                <button onclick="window.location.href = '../dashboard/medicos.html'" class="btn btn-danger">Cancelar</button>
+            </div>
+            
+            <div class="form-container">
+                <form id="medico-form" class="register-form">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dados Pessoais</h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medico-nome">Nome Completo</label>
+                                <input type="text" id="medico-nome" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medico-crm">CRM</label>
+                                <input type="text" id="medico-crm" placeholder="UF-000000" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medico-cpf">CPF</label>
+                                <input type="text" id="medico-cpf" placeholder="000.000.000-00" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medico-rg">RG</label>
+                                <input type="text" id="medico-rg" placeholder="00.000.000-0">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medico-nascimento">Data de Nascimento</label>
+                                <input type="date" id="medico-nascimento" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medico-sexo">Sexo</label>
+                                <select id="medico-sexo" required>
+                                    <option value="">Selecione</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                    <option value="O">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dados Profissionais</h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medico-especialidade">Especialidade Principal</label>
+                                <select id="medico-especialidade" required>
+                                    <option value="">Selecione</option>
+                                    <option value="1">Cardiologia</option>
+                                    <option value="2">Pediatria</option>
+                                    <option value="3">Ortopedia</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medico-subespecialidade">Subespecialidade</label>
+                                <input type="text" id="medico-subespecialidade">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="medico-outras-especialidades">Outras Especialidades</label>
+                            <select id="medico-outras-especialidades" multiple>
+                                <option value="1">Cardiologia</option>
+                                <option value="2">Pediatria</option>
+                                <option value="3">Ortopedia</option>
+                                <option value="4">Dermatologia</option>
+                            </select>
+                            <small>Mantenha pressionado Ctrl para selecionar múltiplas opções</small>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Contato</h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medico-telefone">Telefone</label>
+                                <input type="tel" id="medico-telefone" placeholder="(00) 00000-0000" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medico-email">E-mail</label>
+                                <input type="email" id="medico-email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="medico-endereco">Endereço</label>
+                            <input type="text" id="medico-endereco">
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Dados de Acesso</h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medico-usuario">Nome de Usuário</label>
+                                <input type="text" id="medico-usuario" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="medico-senha">Senha</label>
+                                <input type="password" id="medico-senha" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="medico-confirma-senha">Confirmar Senha</label>
+                            <input type="password" id="medico-confirma-senha" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-danger">Limpar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Médico</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../script.js"></script>
+</body>
+</html>
