@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Financeiro - CherryHP</title>
+    <link rel="stylesheet" href="../estilo.css">
+    <style>
+        /* Estilos específicos para o Financeiro (Adicione ao estilo.css se preferir) */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kpi-card.success { border-left-color: #2ecc71; }
+        .kpi-card.danger { border-left-color: #e74c3c; }
+        .kpi-card.warning { border-left-color: #f39c12; }
+
+        .kpi-info h3 {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .kpi-info .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .kpi-icon {
+            font-size: 32px;
+            opacity: 0.2;
+        }
+
+        .filter-bar {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .chart-container {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding-top: 20px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 10%;
+        }
+
+        .bar {
+            width: 100%;
+            background-color: #3498db;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+            position: relative;
+        }
+        
+        .bar:hover::after {
+            content: attr(data-value);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .bar.expense { background-color: #e74c3c; opacity: 0.7; }
+        
+        .bar-label {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .text-green { color: #2ecc71; font-weight: bold; }
+        .text-red { color: #e74c3c; font-weight: bold; }
+
+        /* Responsividade para tabela */
+        @media (max-width: 768px) {
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .kpi-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>CherryHP</h2>
+            </div>
+            <nav class="sidebar-menu">
+                <div onclick="window.location.href = 'index.html'" class="menu-item active" data-page="dashboard">
+                    <span>🏠</span> Dashboard
+                </div>
+                <div onclick="window.location.href = 'pacientes.html'" class="menu-item" data-page="pacientes">
+                    <span>👨‍👩‍👧‍👦</span> Pacientes
+                </div>
+                <div onclick="window.location.href = 'consultas.html'" class="menu-item" data-page="consultas">
+                    <span>📅</span> Consultas
+                </div>
+                <div onclick="window.location.href = 'medicos.html'" class="menu-item" data-page="medicos">
+                    <span>👨‍⚕️</span> Médicos
+                </div>
+                <div onclick="window.location.href = 'prontuarios.html'" class="menu-item" data-page="prontuarios">
+                    <span>📋</span> Prontuários
+                </div>
+                <div onclick="window.location.href = 'financeiro.html'" class="menu-item" data-page="financeiro">
+                    <span>💰</span> Financeiro
+                </div>
+                <div onclick="window.location.href = 'configuracoes.html'" class="menu-item" data-page="configuracoes">
+                    <span>⚙️</span> Configurações
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">Relatório Financeiro Detalhado</div>
+                <div class="user-info">
+                    <span>Dr. Admin</span>
+                    <div class="user-avatar">DA</div>
+                </div>
+            </header>
+
+            <div class="kpi-grid">
+                <div class="kpi-card success">
+                    <div class="kpi-info">
+                        <h3>Receita Total (Mês)</h3>
+                        <div class="value">R$ 145.250,00</div>
+                        <small class="positive">▲ 12% vs mês anterior</small>
+                    </div>
+                    <div class="kpi-icon">📈</div>
+                </div>
+                <div class="kpi-card danger">
+                    <div class="kpi-info">
+                        <h3>Despesas Totais</h3>
+                        <div class="value">R$ 42.100,00</div>
+                        <small class="negative">▼ 5% vs mês anterior</small>
+                    </div>
+                    <div class="kpi-icon">📉</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-info">
+                        <h3>Lucro Líquido</h3>
+                        <div class="value" style="color: #2980b9;">R$ 103.150,00</div>
+                    </div>
+                    <div class="kpi-icon">💰</div>
+                </div>
+                <div class="kpi-card warning">
+                    <div class="kpi-info">
+                        <h3>Pendente / A Receber</h3>
+                        <div class="value">R$ 12.400,00</div>
+                    </div>
+                    <div class="kpi-icon">⏳</div>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                    <label>Data Início</label>
+                    <input type="date" id="dateStart" value="2023-05-01">
+                </div>
+                <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                    <label>Data Fim</label>
+                    <input type="date" id="dateEnd" value="2023-05-31">
+                </div>
+                <div class="form-group" style="margin-bottom: 0; min-width: 150px;">
+                    <label>Tipo</label>
+                    <select id="typeFilter">
+                        <option value="all">Todos</option>
+                        <option value="entrada">Entradas</option>
+                        <option value="saida">Saídas</option>
+                    </select>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button class="btn btn-primary" onclick="filtrarRelatorio()">🔍 Filtrar</button>
+                    <button class="btn" style="background: #27ae60; color: white;" onclick="exportarCSV()">📥 Excel/CSV</button>
+                    <button class="btn" style="background: #7f8c8d; color: white;" onclick="window.print()">🖨️ Imprimir</button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="card" style="flex: 1;">
+                    <div class="card-header">
+                        <div class="card-title">Fluxo de Caixa (Últimos 6 meses)</div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="bar-group">
+                            <div class="bar" style="height: 40%;" data-value="R$ 40k"></div>
+                            <div class="bar-label">Jan</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 55%;" data-value="R$ 55k"></div>
+                            <div class="bar-label">Fev</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 45%;" data-value="R$ 45k"></div>
+                            <div class="bar-label">Mar</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar expense" style="height: 30%; background-color: #e74c3c;" data-value="Exp: 30k"></div>
+                            <div class="bar-label">Abr (Desp)</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 80%;" data-value="R$ 80k"></div>
+                            <div class="bar-label">Mai</div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar" style="height: 65%; opacity: 0.5;" data-value="Prev: 65k"></div>
+                            <div class="bar-label">Jun</div>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px; color: #7f8c8d; text-align: center;">* Azul: Receita | Vermelho: Despesa Média</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Transações Financeiras</div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="table" id="tabelaFinanceira">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15/05/2023</td>
+                                <td>Consulta Particular - João Silva</td>
+                                <td>Consulta</td>
+                                <td><span class="status-badge active">Entrada</span></td>
+                                <td class="text-green">R$ 450,00</td>
+                                <td><span class="status-badge paid">Pago</span></td>
+                                <td><button class="btn btn-primary" style="padding: 2px 8px; font-size: 12px;">Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td>14/05/2023</td>
+                                <td>Aluguel Sala Comercial</td>
+                                <td>Infraestrutura</td>
+                                <td><span class="status-badge canceled">Saída</span></td>
+                                <td class="text-red">- R$ 2.500,00</td>
+                                <td><span class="status-badge paid">Pago</span></td>
+                                <td><button class="btn btn-primary" style="padding: 2px 8px; font-size: 12px;">Ver</button></td>
+                            </tr>
+                            <tr>
+                                <td>14/05/2023</td>
+                                <td>Exame de Ressonância - Maria B.</td>
+                                <td>Exame de Imagem</td>
+                                <td><span class="status-badge active">Entrada</span></td>
+                                <td class="text-green">R$ 1.200,00</td>
+                                <td><span class="status-badge pending">Pendente</span></td>
+                                <td><button class="btn btn-primary" style="padding: 2px 8px; font-size: 12px;">Cobrar</button></td>
+                            </tr>
+                            <tr>
+                                <td>12/05/2023</td>
+                                <td>Fornecedor de Luvas/Máscaras</td>
+                                <td>Insumos</td>
+                                <td><span class="status-badge canceled">Saída</span></td>
+                                <td class="text-red">- R$ 450,00</td>
+                                <td><span class="status-badge paid">Pago</span></td>
+                                <td><button class="btn btn-primary" style="padding: 2px 8px; font-size: 12px;">Ver</button></td>
+                            </tr>
+                             <tr>
+                                <td>10/05/2023</td>
+                                <td>Cirurgia Catarata - Pedro H.</td>
+                                <td>Cirurgia</td>
+                                <td><span class="status-badge active">Entrada</span></td>
+                                <td class="text-green">R$ 5.500,00</td>
+                                <td><span class="status-badge paid">Pago</span></td>
+                                <td><button class="btn btn-primary" style="padding: 2px 8px; font-size: 12px;">Ver</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+<!--  -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reutiliza a lógica de logout do script.js original
+            const logoutBtn = document.querySelector('.logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    // Ajuste o caminho conforme necessidade
+                    window.location.href = '../index.html?loggedOut=true';
+                });
+            }
+
+            // Animação simples nas barras do gráfico ao carregar
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                let height = bar.style.height;
+                bar.style.height = '0';
+                setTimeout(() => {
+                    bar.style.height = height;
+                }, 200);
+            });
+        });
+
+        function filtrarRelatorio() {
+            const tipo = document.getElementById('typeFilter').value;
+            const rows = document.querySelectorAll('#tabelaFinanceira tbody tr');
+
+            rows.forEach(row => {
+                const tipoCell = row.cells[3].textContent.toLowerCase(); // Coluna Tipo
+                
+                if (tipo === 'all') {
+                    row.style.display = '';
+                } else if (tipo === 'entrada' && tipoCell.includes('entrada')) {
+                    row.style.display = '';
+                } else if (tipo === 'saida' && tipoCell.includes('saída')) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            alert('Filtro aplicado com sucesso!');
+        }
+
+        function exportarCSV() {
+            alert('Iniciando download do relatório financeiro em .CSV...');
+            // Lógica real de exportação iria aqui
+        }
+    </script>
+</body>
+</html>
